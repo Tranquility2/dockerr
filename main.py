@@ -8,12 +8,14 @@ def print_containers_status(header: str = "Containers"):
     for container in containers_list:
         print(f"-> {container.name} [{container.status}]")
 
-test_container = client.containers.run("ubuntu", "echo hello world", detach=True)
-print(test_container.name, test_container.status)
-
-
-print_containers_status(header="(Pre)")
-
-test_container.remove()
-
-print_containers_status(header="(Post)")
+test_container = client.containers.run(image="ubuntu", 
+                                       remove=True,
+                                       detach=True,
+                                       tty=True,
+                                       name="test-container")
+print_containers_status()
+test_container_obj = client.containers.get(test_container.id)
+run_output = test_container_obj.exec_run("echo 'Hello from the container'")
+print(f"Container Output: {run_output.output.decode('utf-8')}")
+test_container_obj.stop()
+print_containers_status()
