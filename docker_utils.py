@@ -1,7 +1,6 @@
 import json
 import docker
 from docker.models.containers import Container
-from docker.models.images import Image
 
 from typing import Optional
 
@@ -13,15 +12,15 @@ class DockerUtils:
     def build_image(self, tag, path, dockerfile="Dockerfile") -> Optional[str]:
         print("Building image...")
         # image_object, image_logs = self.client.images.build(path=path, dockerfile=dockerfile, tag=tag)
-        # Preffer direct API call to get live logs
-        live_logs = self.client.api.build(path=path,
+        # Preffer direct API call to get raw output
+        raw_output = self.client.api.build(path=path,
                                           dockerfile=dockerfile,
                                           tag=tag,
                                           decode=True)
 
         image_id = None
 
-        for line_dict in live_logs:
+        for line_dict in raw_output:
             if line_dict.get("stream"):
                 print(line_dict["stream"], end="")
             elif line_dict.get("error"):
@@ -52,7 +51,9 @@ class DockerUtils:
 
     def print_logs(self, container: Container) -> None:
         logs = container.logs().decode("utf-8")
-        print("Container Logs:\n", logs)
+        print("Container Logs:")
+        for line in logs:
+            print(line, end="")
 
     def stop_container(self, container: Container):
         print("Stopping container...")
