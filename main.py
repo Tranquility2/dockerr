@@ -5,12 +5,6 @@ from docker.models.containers import Container
 
 client = docker.from_env()
 
-def print_containers_status(header: str = "(Containers)"):
-    containers_list = client.containers.list()
-    print(f"{header} Found {len(containers_list)}")
-    for container in containers_list:
-        print(f"-> {container.name} [{container.status}]")
-
 
 TAG = "test-image:latest"
 image_object, image_logs = client.images.build(path=".",
@@ -27,11 +21,11 @@ try:
                                            detach=True,
                                            name="test-container",
                                            ports={"9000/tcp": 9000})
-    print_containers_status()
+    print(f"-> {test_container.name} [{test_container.status}]")
     test_container_obj : Container = client.containers.get(test_container.id)
 
     try:
-        import time; time.sleep(0.2) # Python needs time to load
+        import time; time.sleep(0.3) # Python needs time to load
         response = httpx.get(f"http://localhost:9000", timeout=5)
         print("Response:\n", response.text.partition('\n')[0])
     except Exception as e:
