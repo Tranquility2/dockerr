@@ -1,6 +1,7 @@
 import json
 import docker
 from docker.models.containers import Container
+from docker.errors import DockerException
 
 from typing import Optional
 
@@ -13,10 +14,14 @@ class DockerUtils:
         print("Building image...")
         # image_object, image_logs = self.client.images.build(path=path, dockerfile=dockerfile, tag=tag)
         # Preffer direct API call to get raw output
-        raw_output = self.client.api.build(path=path,
-                                          dockerfile=dockerfile,
-                                          tag=tag,
-                                          decode=True)
+        try:
+            raw_output = self.client.api.build(path=path,
+                                            dockerfile=dockerfile,
+                                            tag=tag,
+                                            decode=True)
+        except (DockerException, TypeError) as e:
+            print(f"Error: {e}")
+            return None
 
         image_id = None
 
