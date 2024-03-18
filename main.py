@@ -1,6 +1,7 @@
 import httpx
 
 from docker_utils import DockerUtils
+from docker_utils import ContainerWrapper
 
 docker_utils = DockerUtils()
 
@@ -9,7 +10,7 @@ TAG = "test-image:latest"
 docker_utils.build_image(tag=TAG, path=".")
 
 try:
-    test_container_obj = docker_utils.run_container(image=TAG,
+    test_container: ContainerWrapper = docker_utils.run_container(image=TAG,
                                                     detach=True,
                                                     name="test-container",
                                                     ports={"9000/tcp": 9000})
@@ -22,10 +23,10 @@ try:
     except Exception as e:
         print(f"Response Error: {e}")
 
-    docker_utils.print_logs(test_container_obj)
+    test_container.print_logs()
 
 except Exception as e:
     print(f"Container Error: {e}")
 finally:
-    docker_utils.stop_container(test_container_obj)
-    docker_utils.remove_container(test_container_obj)
+    test_container.stop()
+    test_container.remove()

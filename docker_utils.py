@@ -16,9 +16,9 @@ class DockerUtils:
         # Preffer direct API call to get raw output
         try:
             raw_output = self.client.api.build(path=path,
-                                            dockerfile=dockerfile,
-                                            tag=tag,
-                                            decode=True)
+                                               dockerfile=dockerfile,
+                                               tag=tag,
+                                               decode=True)
         except (DockerException, TypeError) as e:
             print(f"Error: {e}")
             return None
@@ -47,23 +47,28 @@ class DockerUtils:
                                                detach=detach,
                                                name=name,
                                                ports=ports)
-        return container
+        return ContainerWrapper(container)
 
     def get_container(self, container_id) -> Container:
         print("Getting container...")
         container = self.client.containers.get(container_id)
         return container
 
-    def print_logs(self, container: Container) -> None:
-        logs = container.logs().decode("utf-8")
+
+class ContainerWrapper:
+    def __init__(self, container: Container):
+        self.container = container
+
+    def print_logs(self) -> None:
+        logs = self.container.logs().decode("utf-8")
         print("Container Logs:")
         for line in logs:
             print(line, end="")
 
-    def stop_container(self, container: Container):
+    def stop(self):
         print("Stopping container...")
-        container.stop()
+        self.container.stop()
 
-    def remove_container(self, container: Container):
+    def remove(self):
         print("Removing container...")
-        container.remove()
+        self.container.remove()
