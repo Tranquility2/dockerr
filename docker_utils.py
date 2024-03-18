@@ -1,6 +1,5 @@
 import json
 import docker
-from docker.models.containers import Container
 from docker.errors import DockerException
 
 from typing import Optional
@@ -41,22 +40,30 @@ class DockerUtils:
             print(f"Image ID: {image_id}")
             return image_id
 
-    def run_container(self, image, detach, name, ports) -> Container:
+    def run_container(self, image, detach, name, ports) -> Optional["ContainerWrapper"]:
         print("Running container...")
-        container = self.client.containers.run(image=image,
-                                               detach=detach,
-                                               name=name,
-                                               ports=ports)
-        return ContainerWrapper(container)
+        try:
+            container = self.client.containers.run(image=image,
+                                                   detach=detach,
+                                                   name=name,
+                                                   ports=ports)
+            return ContainerWrapper(container)
+        except DockerException as e:
+            print(f"Error: {e}")
+            return None
 
-    def get_container(self, container_id) -> Container:
+    def get_container(self, container_id) -> Optional["ContainerWrapper"]:
         print("Getting container...")
-        container = self.client.containers.get(container_id)
-        return container
+        try:
+            container = self.client.containers.get(container_id)
+            return ContainerWrapper(container)
+        except DockerException as e:
+            print(f"Error: {e}")
+            return None
 
 
 class ContainerWrapper:
-    def __init__(self, container: Container):
+    def __init__(self, container: docker.models.containers.Container):
         self.container = container
 
     def print_logs(self) -> None:
@@ -65,10 +72,16 @@ class ContainerWrapper:
         for line in logs:
             print(line, end="")
 
-    def stop(self):
+    def stop(self) -> None:
         print("Stopping container...")
-        self.container.stop()
+        try:
+            self.container.stop()
+        except DockerException as e:
+            print(f"Error: {e}")
 
-    def remove(self):
+    def remove(self) -> None:
         print("Removing container...")
-        self.container.remove()
+        try:
+            self.container.remove()
+        except DockerException as e:
+            print(f"Error: {e}")
