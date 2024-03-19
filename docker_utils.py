@@ -2,6 +2,7 @@ import json
 import docker
 from docker import DockerClient
 from docker.errors import DockerException
+from docker.models.containers import Container
 
 from typing import Optional
 
@@ -64,14 +65,17 @@ class DockerUtils:
 
 
 class ContainerWrapper:
-    def __init__(self, container: docker.models.containers.Container):
+    def __init__(self, container: Container):
         self.container = container
 
     def print_logs(self) -> None:
-        logs = self.container.logs().decode("utf-8")
-        print("Container Logs:")
-        for line in logs:
-            print(line, end="")
+        try:
+            logs = self.container.logs().decode("utf-8")
+            print("Container Logs:")
+            for line in logs:
+                print(line, end="")
+        except DockerException as e:
+            print(f"Error: {e}")
 
     def stop(self) -> None:
         print("Stopping container...")
