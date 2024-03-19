@@ -40,11 +40,11 @@ class DockerUtils:
             print(f"Image ID: {image_id}")
             return image_id
 
-    def run_container(self, image, detach, name, ports) -> Optional["ContainerWrapper"]:
+    def run_container_detached(self, image, name, ports) -> Optional["ContainerWrapper"]:
         print("Running container...")
         try:
             container = self.client.containers.run(image=image,
-                                                   detach=detach,
+                                                   detach=True,
                                                    name=name,
                                                    ports=ports)
             return ContainerWrapper(container)

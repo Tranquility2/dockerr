@@ -10,10 +10,9 @@ TAG = "test-image:latest"
 docker_utils.build_image(tag=TAG, path=".")
 
 try:
-    test_container: ContainerWrapper = docker_utils.run_container(image=TAG,
-                                                    detach=True,
-                                                    name="test-container",
-                                                    ports={"9000/tcp": 9000})
+    test_container: ContainerWrapper = docker_utils.run_container_detached(image=TAG,
+                                                                           name="test-container",
+                                                                           ports={"9000/tcp": 9000})
 
     try:
         import time
