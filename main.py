@@ -1,7 +1,7 @@
 import httpx
 
-from docker_utils import DockerUtils
-from docker_utils import ContainerWrapper
+from utils.docker import DockerUtils
+from utils.container import ContainerWrapper
 
 from docker.models.containers import Container
 
