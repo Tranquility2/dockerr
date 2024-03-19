@@ -42,23 +42,23 @@ class DockerUtils:
             print(f"Image ID: {image_id}")
             return image_id
 
-    def run_container_detached(self, image: str, name: str, ports: dict = {}) -> Optional["ContainerWrapper"]:
+    def run_container_detached(self, image: str, name: str, ports: dict = {}) -> Optional[Container]:
         print("Running container...")
         try:
             container = self.client.containers.run(image=image,
                                                    detach=True,
                                                    name=name,
                                                    ports=ports)
-            return ContainerWrapper(container)
+            return container
         except DockerException as e:
             print(f"Error: {e}")
             return None
 
-    def get_container(self, container_id: str) -> Optional["ContainerWrapper"]:
+    def get_container(self, container_id: str) -> Optional[Container]:
         print("Getting container...")
         try:
             container = self.client.containers.get(container_id)
-            return ContainerWrapper(container)
+            return container
         except DockerException as e:
             print(f"Error: {e}")
             return None

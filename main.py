@@ -3,6 +3,8 @@ import httpx
 from docker_utils import DockerUtils
 from docker_utils import ContainerWrapper
 
+from docker.models.containers import Container
+
 docker_utils = DockerUtils()
 
 
@@ -10,9 +12,9 @@ TAG = "test-image:latest"
 docker_utils.build_image(tag=TAG, path=".")
 
 try:
-    test_container: ContainerWrapper = docker_utils.run_container_detached(image=TAG,
-                                                                           name="test-container",
-                                                                           ports={"9000/tcp": 9000})
+    test_container: Container = docker_utils.run_container_detached(image=TAG,
+                                                                    name="test-container",
+                                                                    ports={"9000/tcp": 9000})
 
     try:
         import time
@@ -22,10 +24,11 @@ try:
     except Exception as e:
         print(f"Response Error: {e}")
 
-    test_container.print_logs()
+    conainer_wrap = ContainerWrapper(test_container)
 
 except Exception as e:
     print(f"Container Error: {e}")
 finally:
-    test_container.stop()
-    test_container.remove()
+    conainer_wrap.print_logs()
+    conainer_wrap.stop()
+    conainer_wrap.remove()
