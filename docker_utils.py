@@ -1,5 +1,6 @@
 import json
 import docker
+from docker import DockerClient
 from docker.errors import DockerException
 
 from typing import Optional
@@ -7,9 +8,9 @@ from typing import Optional
 
 class DockerUtils:
     def __init__(self):
-        self.client = docker.from_env()
+        self.client: DockerClient = docker.from_env()
 
-    def build_image(self, tag, path, dockerfile="Dockerfile") -> Optional[str]:
+    def build_image(self, tag: str, path: str, dockerfile: str = "Dockerfile") -> Optional[str]:
         print("Building image...")
         # image_object, image_logs = self.client.images.build(path=path, dockerfile=dockerfile, tag=tag)
         # Preffer direct API call to get raw output
@@ -40,7 +41,7 @@ class DockerUtils:
             print(f"Image ID: {image_id}")
             return image_id
 
-    def run_container_detached(self, image, name, ports) -> Optional["ContainerWrapper"]:
+    def run_container_detached(self, image: str, name: str, ports: dict = {}) -> Optional["ContainerWrapper"]:
         print("Running container...")
         try:
             container = self.client.containers.run(image=image,
@@ -52,7 +53,7 @@ class DockerUtils:
             print(f"Error: {e}")
             return None
 
-    def get_container(self, container_id) -> Optional["ContainerWrapper"]:
+    def get_container(self, container_id: str) -> Optional["ContainerWrapper"]:
         print("Getting container...")
         try:
             container = self.client.containers.get(container_id)
