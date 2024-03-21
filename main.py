@@ -29,6 +29,6 @@ try:
 except Exception as e:
     print(f"Container Error: {e}")
 finally:
-    conainer_wrap.print_logs()
+    conainer_wrap.logs()
     conainer_wrap.stop()
     conainer_wrap.remove()

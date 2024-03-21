@@ -1,18 +1,22 @@
 from docker.models.containers import Container
 from docker.errors import DockerException
 
+from typing import Optional
+
 
 class ContainerWrapper:
     def __init__(self, container: Container):
         self.container = container
         self.name = container.name
 
-    def print_logs(self) -> None:
+    def logs(self, verbose: bool = True) -> Optional[str]:
         try:
             logs = self.container.logs().decode("utf-8")
-            print("Container Logs:")
-            for line in logs:
-                print(line, end="")
+            if verbose:
+                print("Container Logs:")
+                for line in logs:
+                    print(line, end="")
+                return logs
         except DockerException as e:
             print(f"Error: {e}")
 
