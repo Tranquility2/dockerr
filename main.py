@@ -12,6 +12,7 @@ DOCKER_FILE = "Dockerfile"
 docker_runner = DockerRunner(
     tag=TAG, name=NAME, ports=PORTS, path=PATH, dockerfile=DOCKER_FILE)
 
+
 def test_sample():
     print("[Testing sample]")
     try:
@@ -23,8 +24,11 @@ def test_sample():
         print(f"Response Error: {e}")
     print("[Test End]")
 
+
 with docker_runner as (name, id):
-    print(f"[Container ready]")
+    print(f"[Container {name} ready]")
     test_sample()
+
+print(f"[Test Logs]:\n{docker_runner.logs}")
 
 exit(0)

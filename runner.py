@@ -1,4 +1,5 @@
-from typing import Any, SupportsIndex
+from typing import Any
+
 from utils.docker import DockerWrapper
 from utils.container import ContainerWrapper, Container
 
@@ -15,6 +16,7 @@ class DockerRunner:
         self.path = path
         self.dockerfile = dockerfile
         self.prepared = False
+        self.logs = None
 
         self.docker_utils = DockerWrapper()
         self.container: ContainerWrapper = None
@@ -66,7 +68,7 @@ class DockerRunner:
             raise RunnerException(f"Runner Error: {e}")
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any):
-        self.container.logs()
+        self.logs = self.container.logs()
 
         if not self.container:
             raise RunnerException("Container not found!")
