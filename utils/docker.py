@@ -54,11 +54,12 @@ class DockerWrapper:
             print(f"Error: {e}")
             return None
 
-    def get_container(self, container_id: str) -> Optional[Container]:
+    def get_container(self, container_id: str, verbose=False) -> Optional[Container]:
         print("Getting container...")
         try:
             container = self.client.containers.get(container_id)
             return container
-        except DockerException as e:
-            print(f"Error: {e}")
+        except DockerException:
+            if verbose:
+                print(f"Cant get container: {container_id}")
             return None

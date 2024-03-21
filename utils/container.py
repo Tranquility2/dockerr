@@ -8,6 +8,7 @@ class ContainerWrapper:
     def __init__(self, container: Container):
         self.container = container
         self.name = container.name
+        self.id = container.id
 
     def logs(self, verbose: bool = True) -> Optional[str]:
         try:

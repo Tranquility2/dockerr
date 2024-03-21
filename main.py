@@ -1,42 +1,19 @@
 import httpx
 
-from utils.docker import DockerWrapper
-from utils.container import ContainerWrapper
-
-from docker.models.containers import Container
-
-docker_utils = DockerWrapper()
+from runner import DockerRunner
 
 
 TAG = "test-image:latest"
 NAME = "test-container"
-docker_utils.build_image(tag=TAG, path=".")
+PORTS = {"9000/tcp": 9000}
+PATH = "."
+DOCKER_FILE = "Dockerfile"
 
-# check for running container with the same name
-try:
-    container: Container = docker_utils.get_container(NAME)
-    if container:
-        print(f"Container {NAME} already exists!")
-        # check with the user if its ok to remove the container
-        input = input("Do you want to remove it? (y/n): ")
-        if input.lower() == "y":
-            container_wrap = ContainerWrapper(container)
-            container_wrap.stop()
-            container_wrap.remove()
-            print(f"Container {NAME} stopped and removed!")
-        else:
-            print("Exiting...")
-            exit(0)
-except Exception as e:
-    print(f"Container Error: {e}")
+docker_runner = DockerRunner(
+    tag=TAG, name=NAME, ports=PORTS, path=PATH, dockerfile=DOCKER_FILE)
 
-
-try:
-    test_container: Container = docker_utils.run_container_detached(image=TAG,
-                                                                    name=NAME,
-                                                                    ports={"9000/tcp": 9000})
-    conainer_wrap = ContainerWrapper(test_container)
-
+def test_sample():
+    print("[Testing sample]")
     try:
         import time
         time.sleep(0.5)  # Python needs time to load
@@ -44,13 +21,10 @@ try:
         print("Response:\n", response.text.partition('\n')[0])
     except Exception as e:
         print(f"Response Error: {e}")
+    print("[Test End]")
 
-
-except Exception as e:
-    print(f"Container Error: {e}")
-finally:
-    conainer_wrap.logs()
-    conainer_wrap.stop()
-    conainer_wrap.remove()
+with docker_runner as (name, id):
+    print(f"[Container ready]")
+    test_sample()
 
 exit(0)
