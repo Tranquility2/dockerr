@@ -9,12 +9,27 @@ docker_utils = DockerWrapper()
 
 
 TAG = "test-image:latest"
+NAME = "test-container"
 docker_utils.build_image(tag=TAG, path=".")
+
+# check for running container with the same name
+try:
+    container: Container = docker_utils.get_container(NAME)
+    if container:
+        print(f"Container {NAME} already exists!")
+        container_wrap = ContainerWrapper(container)
+        container_wrap.stop()
+        container_wrap.remove()
+        print(f"Container {NAME} stopped and removed!")
+except Exception as e:
+    print(f"Container Error: {e}")
+
 
 try:
     test_container: Container = docker_utils.run_container_detached(image=TAG,
-                                                                    name="test-container",
+                                                                    name=NAME,
                                                                     ports={"9000/tcp": 9000})
+    conainer_wrap = ContainerWrapper(test_container)
 
     try:
         import time
@@ -24,7 +39,6 @@ try:
     except Exception as e:
         print(f"Response Error: {e}")
 
-    conainer_wrap = ContainerWrapper(test_container)
 
 except Exception as e:
     print(f"Container Error: {e}")
