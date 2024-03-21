@@ -1,11 +1,11 @@
 import httpx
 
-from utils.docker import DockerUtils
+from utils.docker import DockerWrapper
 from utils.container import ContainerWrapper
 
 from docker.models.containers import Container
 
-docker_utils = DockerUtils()
+docker_utils = DockerWrapper()
 
 
 TAG = "test-image:latest"

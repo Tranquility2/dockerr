@@ -7,7 +7,7 @@ from docker.models.containers import Container
 from typing import Optional
 
 
-class DockerUtils:
+class DockerWrapper:
     def __init__(self):
         self.client: DockerClient = docker.from_env()
 
