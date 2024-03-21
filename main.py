@@ -17,10 +17,16 @@ try:
     container: Container = docker_utils.get_container(NAME)
     if container:
         print(f"Container {NAME} already exists!")
-        container_wrap = ContainerWrapper(container)
-        container_wrap.stop()
-        container_wrap.remove()
-        print(f"Container {NAME} stopped and removed!")
+        # check with the user if its ok to remove the container
+        input = input("Do you want to remove it? (y/n): ")
+        if input.lower() == "y":
+            container_wrap = ContainerWrapper(container)
+            container_wrap.stop()
+            container_wrap.remove()
+            print(f"Container {NAME} stopped and removed!")
+        else:
+            print("Exiting...")
+            exit(0)
 except Exception as e:
     print(f"Container Error: {e}")
 
@@ -46,3 +52,5 @@ finally:
     conainer_wrap.logs()
     conainer_wrap.stop()
     conainer_wrap.remove()
+
+exit(0)
