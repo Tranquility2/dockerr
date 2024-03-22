@@ -42,13 +42,14 @@ class DockerWrapper:
             print(f"Image ID: {image_id}")
             return image_id
 
-    def run_container_detached(self, image: str, name: str, ports: dict = {}) -> Optional[Container]:
+    def run_container_detached(self, image: str, name: str, ports: dict = {}, env = {}) -> Optional[Container]:
         print("Running container...")
         try:
             container = self.client.containers.run(image=image,
                                                    detach=True,
                                                    name=name,
-                                                   ports=ports)
+                                                   ports=ports,
+                                                   environment=env)
             return container
         except DockerException as e:
             print(f"Error: {e}")

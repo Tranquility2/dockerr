@@ -9,10 +9,11 @@ class RunnerException(Exception):
 
 
 class DockerRunner:
-    def __init__(self, tag: str, name: str, ports: dict = {}, path: str = ".", dockerfile: str = "Dockerfile"):
+    def __init__(self, tag: str, name: str, ports: dict = {}, env={}, path: str = ".", dockerfile: str = "Dockerfile"):
         self.tag = tag
         self.name = name
         self.ports = ports
+        self.env = env
         self.path = path
         self.dockerfile = dockerfile
         self.prepared = False
@@ -59,7 +60,8 @@ class DockerRunner:
         try:
             new_container: Container = self.docker_utils.run_container_detached(image=self.tag,
                                                                                 name=self.name,
-                                                                                ports=self.ports)
+                                                                                ports=self.ports,
+                                                                                env=self.env)
             self.container = ContainerWrapper(new_container)
 
             return self.container.name, self.container.id
