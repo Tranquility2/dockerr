@@ -49,7 +49,7 @@ class DockerRunner:
 
     def _validate(self):
         if not self.prepared:
-            raise RunnerException("Image not prepared!")
+            raise RunnerException("Image not ready!")
         self._remove_dup()
 
     def __enter__(self):
