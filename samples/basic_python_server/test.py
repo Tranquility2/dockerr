@@ -3,27 +3,27 @@ import os
 import sys; sys.path.append(".")  # update python path to include runner module
 from runner import DockerRunner
 
-current_dir = os.path.dirname(os.path.realpath(__file__))
-test_name = "basic_python_server"
-local_url = "http://localhost:9000"
+CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
+TEST_NAME = "basic_python_server"
+LOCAL_URL = "http://localhost:9000"
 
 # Test setup
-TAG = f"test-{test_name}-image:latest"
-NAME = f"test-{test_name}-container"
+TAG = f"test-{TEST_NAME}-image:latest"
+NAME = f"test-{TEST_NAME}-container"
 PORTS = {"9000/tcp": 9000}
-PATH = str(current_dir)
+PATH = str(CURRENT_DIR)
 DOCKER_FILE = "Dockerfile"
 
-dr = DockerRunner(tag=TAG, name=NAME, ports=PORTS,
-                  path=PATH, dockerfile=DOCKER_FILE)
-
-
 def test_basic_python_server():
+    # Create DockerRunner
+    dr = DockerRunner(tag=TAG, name=NAME, ports=PORTS,
+                  path=PATH, dockerfile=DOCKER_FILE)
+    # Use DockerRunner as a context manager
     with dr:
         try:
             import time
             time.sleep(0.5)  # Python needs time to load
-            response = httpx.get(local_url, timeout=5)
+            response = httpx.get(LOCAL_URL, timeout=5)
             print("Response:\n", response.text.partition('\n')[0])
         except Exception as e:
             print(f"Response Error: {e}")
