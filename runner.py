@@ -9,7 +9,7 @@ class RunnerException(Exception):
 
 
 class DockerRunner:
-    def __init__(self, tag: str, name: str, ports: dict, path: str = ".", dockerfile: str = "Dockerfile"):
+    def __init__(self, tag: str, name: str, ports: dict = {}, path: str = ".", dockerfile: str = "Dockerfile"):
         self.tag = tag
         self.name = name
         self.ports = ports
