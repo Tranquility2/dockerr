@@ -1,6 +1,10 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = ["setuptools", "versioningit", "wheel"]
+requires = [
+    "setuptools",
+    "versioningit",
+    "wheel"
+]
 
 [project]
 name = "dockerr"
@@ -8,8 +12,15 @@ description = "A simple python package to manage external testing of docker cont
 readme = "README.md"
 license = { file = "LICENSE.md" }
 requires-python = ">=3.10"
-keywords = ["docker", "testing", "containers", "pytest"]
-authors = [{ name = "Roy Moore", email = "roy@moore.co.il" }]
+keywords = [
+    "docker",
+    "testing",
+    "containers",
+    "pytest"
+]
+authors = [
+    { name = "Roy Moore", email = "roy@moore.co.il" }
+]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -18,12 +29,25 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
-dynamic = ["version"]
-dependencies = ["docker==7.0.0"]
+dynamic = [
+    "version"
+]
+dependencies = [
+    "docker==7.0.0"
+]
 
 [project.optional-dependencies]
-test = ["pytest", "httpx"]
-dev = ["pre-commit", "black", "isort", "pylint", "dockerr[test]"]
+test = [
+    "pytest",
+    "httpx"
+]
+dev = [
+    "pre-commit",
+    "black",
+    "isort",
+    "pylint",
+    "dockerr[test]"
+]
 
 [project.urls]
 homepage = "https://github.com/Tranquility2/dockerr"
