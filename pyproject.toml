@@ -23,7 +23,7 @@ dependencies = ["docker==7.0.0"]
 
 [project.optional-dependencies]
 test = ["pytest", "httpx"]
-dev = ["black", "isort", "dockerr[test]"]
+dev = ["pre-commit", "black", "isort", "dockerr[test]"]
 
 [project.urls]
 homepage = "https://github.com/Tranquility2/dockerr"

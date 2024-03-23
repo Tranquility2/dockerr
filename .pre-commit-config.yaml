@@ -1,0 +1,22 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-toml
+  - repo: local
+    hooks:
+    - id: black
+      name: black
+      description: "Black: The uncompromising Python code formatter"
+      entry: black
+      language: python
+      types: [python]
+    - id: isort
+      name: isort
+      description: "isort your imports, so you don't have to"
+      entry: isort
+      language: python
+      types: [python]
