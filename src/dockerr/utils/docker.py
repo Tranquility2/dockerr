@@ -1,10 +1,10 @@
 import json
+from typing import Optional
+
 import docker
 from docker import DockerClient
 from docker.errors import DockerException
 from docker.models.containers import Container
-
-from typing import Optional
 
 
 class DockerWrapper:
@@ -16,10 +16,7 @@ class DockerWrapper:
         # image_object, image_logs = self.client.images.build(path=path, dockerfile=dockerfile, tag=tag)
         # Preffer direct API call to get raw output
         try:
-            raw_output = self.client.api.build(path=path,
-                                               dockerfile=dockerfile,
-                                               tag=tag,
-                                               decode=True)
+            raw_output = self.client.api.build(path=path, dockerfile=dockerfile, tag=tag, decode=True)
         except (DockerException, TypeError) as e:
             print(f"Error: {e}")
             return None
@@ -42,14 +39,10 @@ class DockerWrapper:
             print(f"Image ID: {image_id}")
             return image_id
 
-    def run_container_detached(self, image: str, name: str, ports: dict = {}, env = {}) -> Optional[Container]:
+    def run_container_detached(self, image: str, name: str, ports: dict = {}, env={}) -> Optional[Container]:
         print("Running container...")
         try:
-            container = self.client.containers.run(image=image,
-                                                   detach=True,
-                                                   name=name,
-                                                   ports=ports,
-                                                   environment=env)
+            container = self.client.containers.run(image=image, detach=True, name=name, ports=ports, environment=env)
             return container
         except DockerException as e:
             print(f"Error: {e}")

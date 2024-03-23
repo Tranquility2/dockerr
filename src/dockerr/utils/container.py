@@ -1,7 +1,7 @@
-from docker.models.containers import Container
-from docker.errors import DockerException
-
 from typing import Optional
+
+from docker.errors import DockerException
+from docker.models.containers import Container
 
 
 class ContainerWrapper:

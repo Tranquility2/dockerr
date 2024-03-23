@@ -1,7 +1,7 @@
 from typing import Any
 
+from utils.container import Container, ContainerWrapper
 from utils.docker import DockerWrapper
-from utils.container import ContainerWrapper, Container
 
 
 class RunnerException(Exception):
@@ -9,7 +9,15 @@ class RunnerException(Exception):
 
 
 class DockerRunner:
-    def __init__(self, tag: str, name: str, ports: dict = {}, env={}, path: str = ".", dockerfile: str = "Dockerfile"):
+    def __init__(
+        self,
+        tag: str,
+        name: str,
+        ports: dict = {},
+        env={},
+        path: str = ".",
+        dockerfile: str = "Dockerfile",
+    ):
         self.tag = tag
         self.name = name
         self.ports = ports
@@ -42,11 +50,9 @@ class DockerRunner:
                     container_wrap.remove()
                     print(f"Container {self.name} stopped and removed!")
                 else:
-                    raise RunnerException(
-                        "Cannot proceed with duplicated container! Exiting...")
+                    raise RunnerException("Cannot proceed with duplicated container! Exiting...")
         except Exception as e:
-            raise RunnerException(
-                f"Error while removing duplicated container: {e}")
+            raise RunnerException(f"Error while removing duplicated container: {e}")
 
     def _validate(self):
         if not self.prepared:
@@ -58,10 +64,9 @@ class DockerRunner:
         self._validate()
 
         try:
-            new_container: Container = self.docker_utils.run_container_detached(image=self.tag,
-                                                                                name=self.name,
-                                                                                ports=self.ports,
-                                                                                env=self.env)
+            new_container: Container = self.docker_utils.run_container_detached(
+                image=self.tag, name=self.name, ports=self.ports, env=self.env
+            )
             self.container = ContainerWrapper(new_container)
 
             return self.container.name, self.container.id

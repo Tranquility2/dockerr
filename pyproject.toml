@@ -22,7 +22,8 @@ dynamic = ["version"]
 dependencies = ["docker==7.0.0"]
 
 [project.optional-dependencies]
-dev = ["pytest", "httpx"]
+test = ["pytest", "httpx"]
+dev = ["black", "isort", "dockerr[test]"]
 
 [project.urls]
 homepage = "https://github.com/Tranquility2/dockerr"
@@ -35,3 +36,11 @@ method = "git"
 
 [tool.versioningit.tag2version]
 rmprefix = "v"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+line_length = 120
+profile = "black"
+multi_line_output = 3
