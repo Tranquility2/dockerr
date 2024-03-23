@@ -1,7 +1,7 @@
 from typing import Any
 
-from utils.container import Container, ContainerWrapper
-from utils.docker import DockerWrapper
+from dockerr.utils.container import Container, ContainerWrapper
+from dockerr.utils.docker import DockerWrapper
 
 
 class RunnerException(Exception):
