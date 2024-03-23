@@ -1,3 +1,5 @@
+""" Used to test the DockerRunner with a simple ubuntu echo container"""
+
 import os
 import tempfile
 import uuid
@@ -13,26 +15,31 @@ ENVIROMENT_ARGS = {
 }
 
 
-def test_basic_python_server():
-    # Create temp linux Dockerfile
+# pylint:disable=duplicate-code
+def create_dockerfile() -> str:
+    """Create a temp Dockerfile"""
     with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
         f.write(
             """
             FROM ubuntu:latest
             CMD ["printenv"]
-        """
+            """
         )
-        DOCKER_FILE = f.name
+        return f.name
+
+
+def test_ubuntu_args():
+    """Test a simple docker container that prints env vars"""
     # Create DockerRunner
     dr = DockerRunner(
         tag=f"test-{TEST_NAME}-image:latest",
         name=f"test-{TEST_NAME}-container",
         path=str(CURRENT_DIR),
-        dockerfile=DOCKER_FILE,
+        dockerfile=create_dockerfile(),
         env=ENVIROMENT_ARGS,
     )
     # Use DockerRunner as a context manager
-    with dr as (name, id):
+    with dr as (name, _):
         print(f"[Container {name} ready]")
 
     for key, value in ENVIROMENT_ARGS.items():

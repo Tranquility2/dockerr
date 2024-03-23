@@ -1,3 +1,5 @@
+""" Used to test the DockerRunner with a simple ubuntu echo container"""
+
 import os
 import tempfile
 
@@ -7,25 +9,30 @@ CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 TEST_NAME = "ubuntu_echo"
 
 
-def test_basic_python_server():
-    # Create temp linux Dockerfile
+# pylint:disable=duplicate-code
+def create_dockerfile() -> str:
+    """Create a temp Dockerfile"""
     with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
         f.write(
             """
             FROM ubuntu:latest
             CMD echo "Test Dockerfile"
-        """
+            """
         )
-        DOCKER_FILE = f.name
+        return f.name
+
+
+def test_ubunut_echo():
+    """Test a simple docker container that echos a string"""
     # Create DockerRunner
     dr = DockerRunner(
         tag=f"test-{TEST_NAME}-image:latest",
         name=f"test-{TEST_NAME}-container",
         path=str(CURRENT_DIR),
-        dockerfile=DOCKER_FILE,
+        dockerfile=create_dockerfile(),
     )
     # Use DockerRunner as a context manager
-    with dr as (name, id):
+    with dr as (name, _):
         print(f"[Container {name} ready]")
 
     assert dr.logs == "Test Dockerfile\n", "Logs do not match expected output"
