@@ -1,8 +1,8 @@
 import os
 import tempfile
 import uuid
-import sys; sys.path.append(".")  # update python path to include runner module
-from runner import DockerRunner
+
+from dockerr.runner import DockerRunner
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 TEST_NAME = "ubuntu_args"
