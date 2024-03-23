@@ -1,3 +1,5 @@
+""" Dcoker related operations """
+
 import json
 from typing import Optional
 
@@ -8,10 +10,13 @@ from docker.models.containers import Container
 
 
 class DockerWrapper:
+    """Docker wrapper class"""
+
     def __init__(self):
         self.client: DockerClient = docker.from_env()
 
     def build_image(self, tag: str, path: str, dockerfile: str = "Dockerfile") -> Optional[str]:
+        """Build Docker Image"""
         print("Building image...")
         # image_object, image_logs = self.client.images.build(path=path, dockerfile=dockerfile, tag=tag)
         # Preffer direct API call to get raw output
@@ -35,12 +40,17 @@ class DockerWrapper:
             else:
                 print(json.dumps(line_dict, indent=4))
 
-        if image_id:
-            print(f"Image ID: {image_id}")
-            return image_id
+        print(f"Image ID: {image_id}")
+        return image_id
 
-    def run_container_detached(self, image: str, name: str, ports: dict = {}, env={}) -> Optional[Container]:
+    def run_container_detached(self, image: str, name: str, ports: dict = None, env=None) -> Optional[Container]:
+        """Run container in detached mode"""
         print("Running container...")
+        if ports is None:
+            ports = {}
+        if env is None:
+            env = {}
+
         try:
             container = self.client.containers.run(image=image, detach=True, name=name, ports=ports, environment=env)
             return container
@@ -49,6 +59,7 @@ class DockerWrapper:
             return None
 
     def get_container(self, container_id: str, verbose=False) -> Optional[Container]:
+        """Get container by ID"""
         print("Getting container...")
         try:
             container = self.client.containers.get(container_id)

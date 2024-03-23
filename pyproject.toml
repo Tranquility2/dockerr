@@ -23,7 +23,7 @@ dependencies = ["docker==7.0.0"]
 
 [project.optional-dependencies]
 test = ["pytest", "httpx"]
-dev = ["pre-commit", "black", "isort", "dockerr[test]"]
+dev = ["pre-commit", "black", "isort", "pylint", "dockerr[test]"]
 
 [project.urls]
 homepage = "https://github.com/Tranquility2/dockerr"
@@ -37,6 +37,12 @@ method = "git"
 [tool.versioningit.tag2version]
 rmprefix = "v"
 
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+    "integration_tests",
+]
+
 [tool.black]
 line-length = 120
 
@@ -45,8 +51,8 @@ line_length = 120
 profile = "black"
 multi_line_output = 3
 
-[tool.pytest.ini_options]
-testpaths = [
-    "tests",
-    "integration_tests",
-]
+[tool.pylint.main]
+fail-under = 10.0
+
+[tool.pylint.format]
+max-line-length = 120
