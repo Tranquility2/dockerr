@@ -53,6 +53,12 @@ dev = [
 homepage = "https://github.com/Tranquility2/dockerr"
 repository = "https://github.com/Tranquility2/dockerr"
 
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["*"]
+exclude = ["tests", "integration_tests"]
+namespaces = true
+
 [tool.versioningit.vcs]
 default-tag = "0.0.0"
 match = ["v*"]
