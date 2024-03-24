@@ -12,7 +12,7 @@ from docker.models.containers import Container
 class DockerWrapper:
     """Docker wrapper class"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.client: DockerClient = docker.from_env()
 
     def build_image(self, tag: str, path: str, dockerfile: str = "Dockerfile") -> Optional[str]:
@@ -43,7 +43,9 @@ class DockerWrapper:
         print(f"Image ID: {image_id}")
         return image_id
 
-    def run_container_detached(self, image: str, name: str, ports: dict = None, env=None) -> Optional[Container]:
+    def run_container_detached(
+        self, image: str, name: str, ports: Optional[dict] = None, env: Optional[dict] = None
+    ) -> Optional[Container]:
         """Run container in detached mode"""
         print("Running container...")
         if ports is None:
@@ -58,7 +60,7 @@ class DockerWrapper:
             print(f"Error: {e}")
             return None
 
-    def get_container(self, container_id: str, verbose=False) -> Optional[Container]:
+    def get_container(self, container_id: str, verbose: bool = False) -> Optional[Container]:
         """Get container by ID"""
         print("Getting container...")
         try:

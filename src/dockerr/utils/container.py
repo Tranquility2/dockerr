@@ -3,7 +3,7 @@
 from typing import Optional
 
 from docker.errors import DockerException
-from docker.models.containers import Container
+from docker.models.containers import Container as Container  # pylint:disable=useless-import-alias
 
 
 class ContainerWrapper:

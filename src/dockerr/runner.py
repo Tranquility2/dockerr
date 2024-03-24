@@ -1,6 +1,6 @@
 """ Runner module for running docker containers """
 
-from typing import Any
+from typing import Any, Optional
 
 from dockerr.utils.container import Container, ContainerWrapper
 from dockerr.utils.docker import DockerWrapper
@@ -19,35 +19,33 @@ class DockerRunner:
         self,
         tag: str,
         name: str,
-        ports: dict = None,
-        env: dict = None,
+        ports: Optional[dict] = None,
+        env: Optional[dict] = None,
         path: str = ".",
         dockerfile: str = "Dockerfile",
     ):
         self.tag = tag
         self.name = name
-
         self.ports = {} if ports is None else ports
         self.env = {} if env is None else env
-
         self.path = path
         self.dockerfile = dockerfile
+
         self.prepared = False
-        self.logs = None
-
+        self.logs: Optional[str] = None
         self.docker_utils = DockerWrapper()
-        self.container: ContainerWrapper = None
+        self.container: Optional[ContainerWrapper] = None
 
-    def _prepare(self):
+    def _prepare(self) -> None:
         """Prepare the image"""
         if not self.docker_utils.build_image(tag=self.tag, path=self.path, dockerfile=self.dockerfile):
             raise RunnerException("Image not built!")
         self.prepared = True
 
-    def _remove_dup(self, provide_feedback: bool = True):
+    def _remove_dup(self, provide_feedback: bool = True) -> None:
         """Remove duplicated container"""
 
-        def get_input():
+        def get_input() -> str:
             """Get user input for removing the duplicated container."""
             return input("Do you want to remove it? (y/n): ").lower()
 
@@ -65,13 +63,13 @@ class DockerRunner:
         except Exception as e:
             raise RunnerException(f"Error while removing duplicated container: {e}") from e
 
-    def _validate(self):
+    def _validate(self) -> None:
         """Validate preconditions"""
         if not self.prepared:
             raise RunnerException("Image not ready!")
         self._remove_dup()
 
-    def __enter__(self):
+    def __enter__(self) -> tuple[str, str]:
         """Run the container"""
         self._prepare()
         self._validate()
@@ -87,11 +85,12 @@ class DockerRunner:
         except Exception as e:
             raise RunnerException(f"Runner Error: {e}") from e
 
-    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any):
+    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
         """Cleanup the container"""
-        self.logs = self.container.logs()
-
         if not self.container:
             raise RunnerException("Container not found!")
+        # Save logs
+        self.logs = self.container.logs()
+        # Stop and remove container
         self.container.stop()
         self.container.remove()
