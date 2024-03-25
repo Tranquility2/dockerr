@@ -39,7 +39,7 @@ dependencies = [
 [project.optional-dependencies]
 test = [
     "pytest",
-    "httpx"
+    "httpx",
 ]
 dev = [
     "pre-commit",

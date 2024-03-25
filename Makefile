@@ -1,5 +1,3 @@
-.PHONY: run clean
-
 SHELL=/bin/bash
 
 setup-dev:
@@ -29,6 +27,9 @@ check-lint:
 
 pytest:
 	python3 -m pytest -v
+
+check-mypy:
+	python3 -m mypy	-p dockerr --no-incremental
 
 build:
 	python3 -m pip install --upgrade build
