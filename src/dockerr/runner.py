@@ -2,7 +2,7 @@
 
 from typing import Any, Optional
 
-from dockerr.utils.container import Container, ContainerWrapper
+from dockerr.utils.container import DockerContainerWrapper
 from dockerr.utils.docker import DockerWrapper
 
 
@@ -34,7 +34,7 @@ class DockerRunner:
         self.prepared = False
         self.logs: Optional[str] = None
         self.docker_utils = DockerWrapper()
-        self.container: Optional[ContainerWrapper] = None
+        self.container: Optional[DockerContainerWrapper] = None
 
     def _prepare(self) -> None:
         """Prepare the image"""
@@ -50,11 +50,11 @@ class DockerRunner:
             return input("Do you want to remove it? (y/n): ").lower()
 
         try:
-            container: Container = self.docker_utils.get_container(self.name)
+            container = self.docker_utils.get_container(self.name)
             if container:
                 print(f"Container {self.name} already exists!")
                 if get_input() == "y" or not provide_feedback:
-                    container_wrap = ContainerWrapper(container)
+                    container_wrap = DockerContainerWrapper(container)
                     container_wrap.stop()
                     container_wrap.remove()
                     print(f"Container {self.name} stopped and removed!")
@@ -75,10 +75,10 @@ class DockerRunner:
         self._validate()
 
         try:
-            new_container: Container = self.docker_utils.run_container_detached(
+            new_container = self.docker_utils.run_container_detached(
                 image=self.tag, name=self.name, ports=self.ports, env=self.env
             )
-            self.container = ContainerWrapper(new_container)
+            self.container = DockerContainerWrapper(new_container)
 
             return self.container.name, self.container.id
 

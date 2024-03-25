@@ -73,6 +73,9 @@ testpaths = [
     "tests",
     "integration_tests",
 ]
+addopts = [
+    "--import-mode=importlib",
+]
 
 [tool.black]
 line-length = 120
@@ -84,6 +87,7 @@ multi_line_output = 3
 
 [tool.pylint.main]
 fail-under = 10.0
+init-hook = 'import sys; sys.path.append(".")'
 
 [tool.pylint.format]
 max-line-length = 120
