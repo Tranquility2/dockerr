@@ -71,7 +71,7 @@ rmprefix = "v"
 [tool.pytest.ini_options]
 testpaths = [
     "tests",
-    "integration_tests",
+    "samples",
 ]
 addopts = [
     "--import-mode=importlib",
