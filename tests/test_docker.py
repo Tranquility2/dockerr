@@ -36,4 +36,4 @@ def test_docker_wrapper_docker_get_containers():
     dw = DockerWrapper()
     containers = dw.get_container("test_container_id")
     assert containers.name == "test_container", f"Name: {containers.name}"
-    assert containers.status == "stopped", f"Status: {containers.status}"
+    assert containers.status == "running", f"Status: {containers.status}"

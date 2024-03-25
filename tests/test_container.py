@@ -15,7 +15,7 @@ def test_container_wrapper_logs() -> None:
     """Test Container Wrapper Logs"""
     container = DockerContainerWrapper(MockContainer())
     logs = container.logs()
-    assert logs == "test_logs", f"Logs: {logs}"
+    assert logs == "[alert] Some test logs\n", f"Logs: {logs}"
 
 
 def test_container_wrapper_stop() -> None:

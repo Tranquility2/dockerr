@@ -9,14 +9,14 @@ class MockContainer:
     """Mock Container Class"""
 
     def __init__(self) -> None:
-        print("Mock Container")
+        print("*Init Mock Container*")
         self.name = "test_container"
         self.id = "test_container_id"
         self.status = "initilized"
 
     def logs(self) -> bytes:
         """Mock Logs Method"""
-        return b"test_logs"
+        return b"[alert] Some test logs\n"
 
     def stop(self) -> None:
         """Mock Stop Method"""
@@ -39,8 +39,6 @@ def mock_container_obj(monkeypatch) -> None:
         """Mock Container Method"""
         return MockContainer()
 
-    print("Mock Container Fixture")
-
     monkeypatch.setattr("docker.models.containers.Container", mock_container, raising=True)
 
 
@@ -48,7 +46,7 @@ class MockDockerClient:  # pylint: disable=too-few-public-methods
     """Mock Docker Client Class"""
 
     def __init__(self) -> None:
-        pass
+        print("*Init Mock Docker Client*")
 
     def from_env(self) -> "MockDockerClient":
         """Mock From Env Method"""
@@ -83,7 +81,7 @@ class MockDockerClient:  # pylint: disable=too-few-public-methods
             """Mock Get Method"""
             if container_id == "test_container_id":
                 mock_container = MockContainer()
-                mock_container.stop()
+                mock_container.run()
                 return mock_container
             return None
 
