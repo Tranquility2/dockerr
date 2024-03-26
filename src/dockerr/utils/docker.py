@@ -15,7 +15,7 @@ class DockerWrapper:
     def __init__(self) -> None:
         self.client: DockerClient = docker.from_env()
 
-    def build_image(self, tag: str, path: str, dockerfile: str = "Dockerfile") -> str:
+    def build_image(self, tag: str, path: str, dockerfile: str = "Dockerfile") -> Optional[str]:
         """Build Docker Image"""
         print("Building image...")
         # image_object, image_logs = self.client.images.build(path=path, dockerfile=dockerfile, tag=tag)

@@ -31,3 +31,9 @@ repos:
           "-rn", # Only display messages
           "-sn", # Don't display the score
         ]
+    - id: mypy
+      name: Run mypy
+      description: "Mypy: Python type checker"
+      entry: mypy
+      language: system
+      types: [python]
