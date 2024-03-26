@@ -28,6 +28,12 @@ check-lint:
 pytest:
 	python3 -m pytest -v
 
+coverage:
+	python3 -m coverage run --source=dockerr --module pytest \
+	--verbose tests && coverage report --show-missing
+
+tests: | pytest coverage
+
 check-mypy:
 	python3 -m mypy	-p dockerr --no-incremental
 

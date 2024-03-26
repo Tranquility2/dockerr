@@ -3,6 +3,7 @@
 from typing import Optional
 
 import pytest
+from docker.errors import DockerException
 
 
 class MockContainer:
@@ -64,6 +65,9 @@ class MockDockerClient:  # pylint: disable=too-few-public-methods
                 {"stream": "Step 2/2 : COPY . /app\n"},
                 {"stream": " ---> 2e2f3b6f7a7e\n"},
                 {"aux": {"ID": "test_image_id"}},
+                {"error": "Some error\n"},
+                {"status": "Some status\n"},
+                {"unknown": "Some unknown"},
             ]
 
     class containers:  # pylint: disable=invalid-name,too-few-public-methods
@@ -79,11 +83,12 @@ class MockDockerClient:  # pylint: disable=too-few-public-methods
         @staticmethod
         def get(container_id) -> Optional[MockContainer]:
             """Mock Get Method"""
-            if container_id == "test_container_id":
+            if container_id == "test_container":
                 mock_container = MockContainer()
                 mock_container.run()
                 return mock_container
-            return None
+
+            raise DockerException("Container not found")
 
 
 @pytest.fixture(autouse=True)

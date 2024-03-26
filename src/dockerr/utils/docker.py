@@ -15,16 +15,12 @@ class DockerWrapper:
     def __init__(self) -> None:
         self.client: DockerClient = docker.from_env()
 
-    def build_image(self, tag: str, path: str, dockerfile: str = "Dockerfile") -> Optional[str]:
+    def build_image(self, tag: str, path: str, dockerfile: str = "Dockerfile") -> str:
         """Build Docker Image"""
         print("Building image...")
         # image_object, image_logs = self.client.images.build(path=path, dockerfile=dockerfile, tag=tag)
         # Preffer direct API call to get raw output
-        try:
-            raw_output = self.client.api.build(path=path, dockerfile=dockerfile, tag=tag, decode=True)
-        except (DockerException, TypeError) as e:
-            print(f"Error: {e}")
-            return None
+        raw_output = self.client.api.build(path=path, dockerfile=dockerfile, tag=tag, decode=True)
 
         image_id = None
 
@@ -45,7 +41,7 @@ class DockerWrapper:
 
     def run_container_detached(
         self, image: str, name: str, ports: Optional[dict] = None, env: Optional[dict] = None
-    ) -> Optional[Container]:
+    ) -> Container:
         """Run container in detached mode"""
         print("Running container...")
         if ports is None:
@@ -53,20 +49,14 @@ class DockerWrapper:
         if env is None:
             env = {}
 
-        try:
-            container = self.client.containers.run(image=image, detach=True, name=name, ports=ports, environment=env)
-            return container
-        except DockerException as e:
-            print(f"Error: {e}")
-            return None
+        container = self.client.containers.run(image=image, detach=True, name=name, ports=ports, environment=env)
+        return container
 
-    def get_container(self, container_id: str, verbose: bool = False) -> Optional[Container]:
+    def get_container(self, container_id: str) -> Optional[Container]:
         """Get container by ID"""
         print("Getting container...")
         try:
             container = self.client.containers.get(container_id)
             return container
         except DockerException:
-            if verbose:
-                print(f"Cant get container: {container_id}")
             return None

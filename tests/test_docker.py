@@ -19,6 +19,9 @@ def test_docker_wrapper_build_image(capfd):
     assert "Step 1/2 : FROM python:3.8" in out
     assert "Step 2/2 : COPY . /app" in out
     assert "Image ID: test_image_id" in out
+    assert "Some error" in out
+    assert "Some status" in out
+    assert "Some unknown" in out
 
 
 def test_docker_wrapper_run_container_detached(capfd):
@@ -34,6 +37,13 @@ def test_docker_wrapper_run_container_detached(capfd):
 def test_docker_wrapper_docker_get_containers():
     """Test Docker Wrapper Get Containers"""
     dw = DockerWrapper()
-    containers = dw.get_container("test_container_id")
+    containers = dw.get_container("test_container")
     assert containers.name == "test_container", f"Name: {containers.name}"
     assert containers.status == "running", f"Status: {containers.status}"
+
+
+def test_docker_wrapper_docker_get_containers_exception():
+    """Test Docker Wrapper Get Containers Exception"""
+    dw = DockerWrapper()
+    containers = dw.get_container("no_container")
+    assert containers is None, f"Containers: {containers}"

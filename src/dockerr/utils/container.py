@@ -1,8 +1,5 @@
 """ Container related operations"""
 
-from typing import Optional
-
-from docker.errors import DockerException
 from docker.models.containers import Container
 
 
@@ -14,31 +11,21 @@ class DockerContainerWrapper:
         self.name = container.name
         self.id = container.id
 
-    def logs(self, verbose: bool = True) -> Optional[str]:
+    def logs(self, verbose: bool = True) -> str:
         """Get Container Logs"""
-        try:
-            logs = self.container.logs().decode("utf-8")
-            if verbose:
-                print("Container Logs:")
-                for line in logs:
-                    print(line, end="")
-            return logs
-        except DockerException as e:
-            print(f"Error: {e}")
-            return None
+        logs = self.container.logs().decode("utf-8")
+        if verbose:
+            print("Container Logs:")
+            for line in logs:
+                print(line, end="")
+        return logs
 
     def stop(self) -> None:
         """Stop Container"""
         print(f"Stopping {self.name}...")
-        try:
-            self.container.stop()
-        except DockerException as e:
-            print(f"Error: {e}")
+        self.container.stop()
 
     def remove(self) -> None:
         """Remove Container"""
         print(f"Removing {self.name}...")
-        try:
-            self.container.remove()
-        except DockerException as e:
-            print(f"Error: {e}")
+        self.container.remove()

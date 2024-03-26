@@ -39,6 +39,7 @@ dependencies = [
 [project.optional-dependencies]
 test = [
     "pytest",
+    "pytest-cov",
     "httpx",
 ]
 dev = [
@@ -91,6 +92,12 @@ init-hook = 'import sys; sys.path.append(".")'
 
 [tool.pylint.format]
 max-line-length = 120
+
+[tool.coverage.run]
+omit = ["dockerr/tests/*", "dockerr/samples/*"]
+
+[tool.coverage.report]
+fail_under = 100
 
 [tool.mypy]
 ignore_missing_imports = true
