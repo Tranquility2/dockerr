@@ -28,5 +28,8 @@ with DockerRunner(tag, name, ports, path, dockerfile=DOCKER_FILE):
 ## Status
 This is an early version of the framework and it's still under development.
 
+> [!IMPORTANT]
+> Making an effort to consolidate this framework cabablities into https://github.com/testcontainers/testcontainers-python
+
 ## Examples
 Please checkout the samples folder for more examples.
