@@ -22,7 +22,7 @@ authors = [
     { name = "Roy Moore", email = "roy@moore.co.il" }
 ]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 7 - Inactive",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
